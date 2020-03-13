@@ -33,20 +33,8 @@ export class BackendStack extends cdk.Stack {
 
     const api = new apigateway.RestApi(this, 'MessagesAPI');
 
-    const proxy = api.root.addProxy({
+    api.root.addProxy({
       defaultIntegration: new apigateway.LambdaIntegration(backend)
-    });
-
-    const websiteBucket = new s3.Bucket(this, 'MessagesWebsite', {
-      websiteIndexDocument: 'index.html',
-      publicReadAccess: true
-    });
-
-    new s3deploy.BucketDeployment(this, 'DeployMessagesWebsite', {
-      sources: [
-        s3deploy.Source.asset(path.join(__dirname, '..', 'app', 'web'))
-      ],
-      destinationBucket: websiteBucket
     });
   }
 }
